@@ -1,0 +1,1 @@
+Projeto desenvolvido em React, ele é bastante simples. Possui uma mecanica de jogo atualmente onde funciona como perguntas e repostas, futuramente mais funcionalidades serão implementadas
