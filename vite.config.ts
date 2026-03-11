@@ -6,8 +6,9 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(),
-    tailwindcss()
+    tailwindcss(),
   ],
+  base:"/projetoArandu",
    resolve: {
     alias: {
       // Alias @ to the src directory

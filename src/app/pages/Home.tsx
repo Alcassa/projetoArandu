@@ -22,14 +22,21 @@ export default function Home() {
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
             Desvendando os mistérios da Engenharia Aeroespacial através da gamificação
           </p>
-          
-          <Link
-            to="/quiz"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-lg font-semibold transition-colors shadow-lg shadow-blue-500/50"
-          >
-            Começar Missão
-            <Rocket className="w-5 h-5" />
-          </Link>
+          <div className="flex justify-center gap-6">
+            <Link
+              to="/quiz"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-lg font-semibold transition-colors shadow-lg shadow-blue-500/50"
+            >
+              Começar Missão
+              <Rocket className="w-5 h-5" />
+            </Link>
+
+            <Link to="/resta-um" 
+            className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-full text-lg font-semibold transition-colors shadow-lg shadow-red-500/50">
+            resta um
+            <BookOpen className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
 
         <MissionOverview />
