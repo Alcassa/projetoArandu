@@ -9,9 +9,11 @@ jobs:
   deploy:
     runs-on: ubuntu-18.04
     steps:
-      - name: Build web-app
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          node-version: "24.x"
+          node-version: '24.x'
+      - name: Build web-app
         run: |
           npm ci
           npm run build
