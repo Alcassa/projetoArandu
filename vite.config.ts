@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react(),
     tailwindcss(),
   ],
-  base:"/projetoArandu",
+  base:"/projetoArandu/",
    resolve: {
     alias: {
       // Alias @ to the src directory

@@ -1,9 +1,9 @@
-import { createBrowserRouter } from "react-router";
+import { createHashRouter } from "react-router-dom";
 import Home from "./app/pages/Home";
 import Quiz from "./app/pages/Quiz";
 import RestaUm from "./app/pages/RestaUm";
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: "/",
     Component: Home,

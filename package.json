@@ -1,6 +1,6 @@
 {
   "name": "sitearandu",
-  "homepage": "http://Alcassa.github.io/projetoArandu",
+  "homepage": "https://alcassa.github.io/projetoArandu",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
