@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { Rocket, Trophy, Star, CheckCircle2, XCircle, Home } from "lucide-react";
 import { questions } from "../data/questions.ts";
 import { Footer } from "../components/Footer.tsx";
 
 export default function Quiz() {
-  const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
