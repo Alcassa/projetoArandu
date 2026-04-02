@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 import { Rocket, BookOpen } from "lucide-react";
-import { About } from "../components/About.tsx";
-import { MissionOverview } from "../components/MissionOverview.tsx";
-import { Footer } from "../components/Footer.tsx";
+import { About } from "../components/layout/About.tsx";
+import { MissionOverview } from "../components/layout/MissionOverview.tsx";
+import { Footer } from "../components/layout/Footer.tsx";
 
 export default function Home() {
   return (

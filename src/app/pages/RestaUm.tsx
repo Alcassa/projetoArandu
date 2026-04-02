@@ -11,9 +11,9 @@ import {
   XCircle,
   BrainCircuit
 } from "lucide-react";
-import { Button } from "../components/button.tsx";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/Card.tsx";
-import { Badge } from "../components/Badge.tsx";
+import { Button } from "../components/ui/button.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card.tsx";
+import { Badge } from "../components/features/Badge.tsx";
 import { restaUmQuestions as questions } from "../data/resta-um-questions.ts";
 
 type GameState = "intro" | "playing" | "gameover" | "victory";
