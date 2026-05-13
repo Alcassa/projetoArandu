@@ -10,6 +10,14 @@ export default function Home() {
       {/* Hero */}
       <div className="max-w-6xl mx-auto px-4 py-20">
         <div className="text-center mb-16">
+           <div className="absolute top-0 right-0 hidden sm:block">
+        <Link 
+          to="/login"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-white rounded-full text-sm font-medium transition-colors border border-slate-700 backdrop-blur-sm"
+        >
+          Entrar
+        </Link>
+        </div>
           <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 px-4 py-2 rounded-full mb-6">
             <Rocket className="w-5 h-5 text-blue-400" />
             <span className="text-blue-300 text-sm">Projeto de Extensão Universitária</span>

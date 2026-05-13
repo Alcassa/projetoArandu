@@ -10,6 +10,9 @@ import type { QuizTheme } from "../data/questions.ts";
 import { ResultsScreen } from "../components/features/ResultsSreen.tsx";
 import { ProgressBar } from "../components/layout/ProgressBar.tsx";
 import { QuestionCard } from "../components/layout/QuestionCard.tsx";
+import { collection,addDoc,serverTimestamp } from "firebase/firestore";
+import { db,auth } from "../data/firebaseConfig.ts"; 
+import { toast } from "sonner";
 
 const getThemeIcon = (theme: QuizTheme, className: string = "w-8 h-8") => {
   switch (theme) {
@@ -27,6 +30,8 @@ export default function Quiz() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [quizComplete, setQuizComplete] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState<number>(0);
+   const user = auth.currentUser;
 
   const currentQuestions = selectedTheme ? questionsByTheme[selectedTheme] : [];
   const question = currentQuestions[currentQuestion];
@@ -48,6 +53,7 @@ export default function Quiz() {
     setSelectedAnswer(null);
     setShowFeedback(false);
     setQuizComplete(false);
+    setCorrectAnswers(0);
   };
 
   const handleAnswerClick = (answerIndex: number) => {
@@ -58,15 +64,17 @@ export default function Quiz() {
     
     if (answerIndex === question.correctAnswer) {
       setScore(score + question.points);
+      setCorrectAnswers(prev => prev + 1);
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < currentQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
       setShowFeedback(false);
     } else {
+      await saveResult();
       setQuizComplete(true);
     }
   };
@@ -79,6 +87,33 @@ export default function Quiz() {
     setShowFeedback(false);
     setQuizComplete(false);
   };
+  const saveResult = async () => {
+  try {
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    await addDoc(collection(db, "resultados"), {
+      uid: user.uid,
+      nome:user.displayName || "Usuário sem nome",
+      email: user.email,
+      tema: selectedTheme,
+      pontuacao: score,
+      acertos: correctAnswers,
+      totalQuestoes: currentQuestions.length,
+
+      criadoEm: serverTimestamp()
+    });
+
+    console.log("Resultado salvo!");
+  } catch (error) {
+    console.error("Erro ao salvar:", error);
+  }
+if (!user) {
+  toast.error("Você precisa estar logado");
+  return;
+}
+};
 
   // Tela de Seleção de Tema
   if (!selectedTheme) {

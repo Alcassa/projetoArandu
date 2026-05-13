@@ -1,4 +1,4 @@
-import { Target, Trophy, BookOpen } from "lucide-react"
+import { Target, BookOpen } from "lucide-react"
 
 
 
@@ -13,18 +13,14 @@ export const MissionOverview = () => {
             aeroespacial. Aprenda conceitos complexos de forma envolvente e recompensadora.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {[
               {
                 icon: <Target className="w-8 h-8 text-blue-400" />,
                 title: "Objetivos Claros",
                 description: "Complete desafios estruturados que guiam seu aprendizado através de conceitos fundamentais da engenharia aeroespacial."
               },
-              {
-                icon: <Trophy className="w-8 h-8 text-purple-400" />,
-                title: "Sistema de Recompensas",
-                description: "Ganhe pontos e avance de nível conforme demonstra domínio sobre os tópicos estudados."
-              },
+             
               {
                 icon: <BookOpen className="w-8 h-8 text-green-400" />,
                 title: "Aprendizado Ativo",
