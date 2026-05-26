@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { 
-  Heart, 
-  Lightbulb, 
-  Trophy, 
-  Rocket, 
-  ArrowRight, 
-  RotateCcw, 
-  CheckCircle2, 
+import {
+  Heart,
+  Lightbulb,
+  Trophy,
+  Rocket,
+  ArrowRight,
+  RotateCcw,
+  CheckCircle2,
   XCircle,
   BrainCircuit
 } from "lucide-react";
@@ -15,6 +15,8 @@ import { Button } from "../components/ui/button.tsx";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card.tsx";
 import { Badge } from "../components/features/Badge.tsx";
 import { restaUmQuestions as questions } from "../data/resta-um-questions.ts";
+import { auth, db } from "../data/firebaseConfig.ts";
+import { addDoc, collection } from "firebase/firestore";
 
 type GameState = "intro" | "playing" | "gameover" | "victory";
 
@@ -26,6 +28,17 @@ export default function RestaUm() {
   const [eliminatedOptions, setEliminatedOptions] = useState<string[]>([]);
   const [showHint, setShowHint] = useState(false);
   const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
+  const [wrongAnswers, setWrongAnswers] = useState(0)
+  const [correctAnswers, setCorrectAnswers] = useState<number>(0)
+  const [wrongQuestions, setWrongQuestions] = useState<
+    {
+      id: number;
+      pergunta: string;
+      respostaMarcada: string;
+      respostaCorreta: string;
+      categoria: string;
+    }[]
+  >([]);
 
   const startGame = () => {
     setGameState("playing");
@@ -35,65 +48,155 @@ export default function RestaUm() {
     setEliminatedOptions([]);
     setShowHint(false);
     setAnsweredCorrectly(false);
+    setCorrectAnswers(0);
+    setWrongQuestions([]);
+    setWrongAnswers(0);
   };
 
   const useHint = () => {
-    if (hintsRemaining <= 0 || answeredCorrectly) return;
-    
-    const currentQuestion = questions[currentQuestionIndex];
-    // Acha as alternativas que são erradas e ainda não foram eliminadas
-    const incorrectOptions = currentQuestion.options.filter(
-      opt => opt !== currentQuestion.correct && !eliminatedOptions.includes(opt)
-    );
-    
+
+    if (hintsRemaining <= 0 || answeredCorrectly)
+      return;
+
+    const currentQuestion =
+      questions[currentQuestionIndex];
+
+    const incorrectOptions =
+      currentQuestion.options.filter(
+        (_, index) =>
+          index !== currentQuestion.correct &&
+          !eliminatedOptions.includes(
+            currentQuestion.options[index]
+          )
+      );
+
     if (incorrectOptions.length > 0) {
-      // Escolhe uma aleatoriamente para eliminar
-      const optionToEliminate = incorrectOptions[Math.floor(Math.random() * incorrectOptions.length)];
-      setEliminatedOptions(prev => [...prev, optionToEliminate]);
+
+      const optionToEliminate =
+        incorrectOptions[
+        Math.floor(
+          Math.random() * incorrectOptions.length
+        )
+        ];
+
+      setEliminatedOptions(prev => [
+        ...prev,
+        optionToEliminate
+      ]);
+
       setHintsRemaining(prev => prev - 1);
+
       setShowHint(true);
     }
   };
 
-  const handleAnswer = (option: string) => {
-    if (answeredCorrectly) return; // Previne cliques após acertar
-    
+  const handleAnswer = (answerIndex: number) => {
+
+    if (answeredCorrectly) return;
+
     const currentQuestion = questions[currentQuestionIndex];
-    
-    if (option === currentQuestion.correct) {
+
+    if (answerIndex === currentQuestion.correct) {
+
       setAnsweredCorrectly(true);
+
+      setCorrectAnswers(prev => prev + 1);
+
     } else {
-      // Resposta errada
-      if (!eliminatedOptions.includes(option)) {
-        setEliminatedOptions(prev => [...prev, option]);
-        setLives(prev => {
-          const newLives = prev - 1;
-          if (newLives <= 0) {
-            setTimeout(() => setGameState("gameover"), 600);
+
+      const selectedOption =
+        currentQuestion.options[answerIndex];
+
+      if (!eliminatedOptions.includes(selectedOption)) {
+
+        setWrongAnswers(prev => prev + 1);
+
+        setWrongQuestions(prev => [
+          ...prev,
+          {
+            id: currentQuestion.id,
+            pergunta: currentQuestion.question,
+            respostaMarcada: selectedOption,
+            respostaCorreta:
+              currentQuestion.options[currentQuestion.correct],
+            categoria: currentQuestion.category
           }
+        ]);
+
+        setEliminatedOptions(prev => [
+          ...prev,
+          selectedOption
+        ]);
+
+        setLives(prev => {
+
+          const newLives = prev - 1;
+
+          if (newLives <= 0) {
+
+            setTimeout(async () => {
+
+              await saveResult("gameover");
+
+              setGameState("gameover");
+
+            }, 600);
+          }
+
           return newLives;
         });
-        setShowHint(true); // Mostra a dica automaticamente ao errar
+
+        setShowHint(true);
       }
     }
   };
 
-  const nextQuestion = () => {
+  const nextQuestion = async () => {
     if (currentQuestionIndex + 1 < questions.length) {
+
       setCurrentQuestionIndex(prev => prev + 1);
       setEliminatedOptions([]);
       setShowHint(false);
       setAnsweredCorrectly(false);
+
     } else {
+
+      await saveResult("gameover");
+
       setGameState("victory");
     }
   };
+  const saveResult = async (result: "victory" | "gameover") => {
+    try {
+      const user = auth.currentUser;
+
+      if (!user) return;
+
+      await addDoc(collection(db, "resultados-resta-um"), {
+        uid: user.uid,
+        nome: user.displayName,
+        email: user.email,
+
+        acertos: correctAnswers,
+        erros: wrongAnswers,
+        perguntasErradas: wrongQuestions,
+
+        totalQuestoes: questions.length,
+
+        criadoEm: new Date()
+      });
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-slate-100 p-4 md:p-8">
-      
+
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
@@ -111,7 +214,7 @@ export default function RestaUm() {
       </div>
 
       <div className="max-w-4xl mx-auto">
-        
+
         {/* TELA DE INTRODUÇÃO */}
         {gameState === "intro" && (
           <Card className="bg-slate-800/80 border-slate-700 shadow-xl">
@@ -147,7 +250,7 @@ export default function RestaUm() {
         {/* TELA DE JOGO */}
         {gameState === "playing" && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            
+
             {/* HUD: Progresso e Vidas */}
             <div className="flex flex-col md:flex-row justify-between items-center bg-slate-800/80 p-4 rounded-xl border border-slate-700 gap-4">
               <div className="flex items-center gap-3">
@@ -155,12 +258,18 @@ export default function RestaUm() {
                   Questão {currentQuestionIndex + 1} de {questions.length}
                 </Badge>
               </div>
-              
+
               <div className="flex items-center gap-4">
-                <Button 
-                  onClick={useHint} 
-                  disabled={hintsRemaining <= 0 || answeredCorrectly || currentQuestion.options.filter(opt => opt !== currentQuestion.correct && !eliminatedOptions.includes(opt)).length === 0}
-                  variant="outline" 
+                <Button
+                  onClick={useHint}
+                  disabled={hintsRemaining <= 0 || answeredCorrectly || currentQuestion.options.filter(
+                    (_, index) =>
+                      index !== currentQuestion.correct &&
+                      !eliminatedOptions.includes(
+                        currentQuestion.options[index]
+                      )
+                  ).length === 0}
+                  variant="outline"
                   className="bg-yellow-900/40 border-yellow-700/50 text-yellow-500 hover:bg-yellow-900/60 hover:text-yellow-400 font-semibold"
                 >
                   <Lightbulb className="w-4 h-4 mr-2" />
@@ -170,13 +279,12 @@ export default function RestaUm() {
                 <div className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-full border border-slate-700">
                   <span className="text-sm font-semibold text-slate-300 mr-2">Vidas:</span>
                   {[...Array(3)].map((_, i) => (
-                    <Heart 
-                      key={i} 
-                      className={`w-6 h-6 transition-all duration-300 ${
-                        i < lives 
-                          ? 'text-red-500 fill-red-500 scale-100' 
-                          : 'text-slate-700 fill-slate-700 scale-75 opacity-50'
-                      }`} 
+                    <Heart
+                      key={i}
+                      className={`w-6 h-6 transition-all duration-300 ${i < lives
+                        ? 'text-red-500 fill-red-500 scale-100'
+                        : 'text-slate-700 fill-slate-700 scale-75 opacity-50'
+                        }`}
                     />
                   ))}
                 </div>
@@ -207,14 +315,14 @@ export default function RestaUm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {currentQuestion.options.map((option, index) => {
                 const isEliminated = eliminatedOptions.includes(option);
-                const isCorrect = option === currentQuestion.correct;
+                const isCorrect = index === currentQuestion.correct;
                 const isSelectedCorrect = answeredCorrectly && isCorrect;
 
                 return (
                   <Button
                     key={index}
                     disabled={isEliminated || answeredCorrectly}
-                    onClick={() => handleAnswer(option)}
+                    onClick={() => handleAnswer(index)}
                     variant="outline"
                     className={`
                       h-auto p-6 flex items-center justify-start text-left text-lg transition-all duration-300 whitespace-normal
@@ -228,9 +336,9 @@ export default function RestaUm() {
                         ${isEliminated ? 'bg-red-900/50 text-red-400' : 'bg-slate-900 text-slate-400'}
                         ${isSelectedCorrect ? 'bg-green-500 text-white' : ''}
                       `}>
-                        {isEliminated ? <XCircle className="w-5 h-5" /> : 
-                         isSelectedCorrect ? <CheckCircle2 className="w-5 h-5" /> : 
-                         String.fromCharCode(65 + index)}
+                        {isEliminated ? <XCircle className="w-5 h-5" /> :
+                          isSelectedCorrect ? <CheckCircle2 className="w-5 h-5" /> :
+                            String.fromCharCode(65 + index)}
                       </div>
                       <span className="flex-1 leading-tight">{option}</span>
                     </div>
@@ -242,8 +350,8 @@ export default function RestaUm() {
             {/* Botão de Próxima Pergunta */}
             {answeredCorrectly && (
               <div className="flex justify-center pt-8 animate-in fade-in zoom-in-95">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   onClick={nextQuestion}
                   className="bg-green-600 hover:bg-green-700 text-lg px-8 py-6 shadow-lg shadow-green-600/20"
                 >

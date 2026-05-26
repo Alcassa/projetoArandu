@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import {  Rocket, Trophy, Orbit, Code, Zap, PencilRuler } from "lucide-react";
-import { Card, CardHeader, CardContent, CardTitle} from "../components/ui/Card.tsx";
+import { Rocket, Trophy, Orbit, Code, Zap, PencilRuler } from "lucide-react";
+import { Card, CardHeader, CardContent, CardTitle } from "../components/ui/Card.tsx";
 import { Button } from "../components/ui/button.tsx";
 import { FeedbackSection } from "../components/layout/FeedbackSection.tsx";
 import { QuizHeader } from "../components/layout/QuizHeadear.tsx";
-import { questionsByTheme} from "../data/questions.ts";
+import { questionsByTheme } from "../data/questions.ts";
 import type { QuizTheme } from "../data/questions.ts";
 import { ResultsScreen } from "../components/features/ResultsSreen.tsx";
 import { ProgressBar } from "../components/layout/ProgressBar.tsx";
 import { QuestionCard } from "../components/layout/QuestionCard.tsx";
-import { collection,addDoc,serverTimestamp } from "firebase/firestore";
-import { db,auth } from "../data/firebaseConfig.ts"; 
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db, auth } from "../data/firebaseConfig.ts";
 import { toast } from "sonner";
 
 const getThemeIcon = (theme: QuizTheme, className: string = "w-8 h-8") => {
@@ -31,7 +31,8 @@ export default function Quiz() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [quizComplete, setQuizComplete] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
-   const user = auth.currentUser;
+  const [wrongQuestions, setWrongQuestions] = useState<any[]>([]);
+  const user = auth.currentUser;
 
   const currentQuestions = selectedTheme ? questionsByTheme[selectedTheme] : [];
   const question = currentQuestions[currentQuestion];
@@ -39,7 +40,7 @@ export default function Quiz() {
   const getLevel = (finalScore: number) => {
     const totalPoints = currentQuestions.reduce((sum, q) => sum + q.points, 0);
     const percentage = totalPoints > 0 ? (finalScore / totalPoints) * 100 : 0;
-    
+
     if (percentage >= 90) return { name: "Astronauta Expert", icon: "🚀", color: "text-yellow-400" };
     if (percentage >= 70) return { name: "Piloto Espacial", icon: "✈️", color: "text-blue-400" };
     if (percentage >= 50) return { name: "Cadete", icon: "🎖️", color: "text-green-400" };
@@ -54,17 +55,36 @@ export default function Quiz() {
     setShowFeedback(false);
     setQuizComplete(false);
     setCorrectAnswers(0);
+    setWrongQuestions([]);
   };
 
   const handleAnswerClick = (answerIndex: number) => {
     if (showFeedback || !question) return;
-    
+
     setSelectedAnswer(answerIndex);
     setShowFeedback(true);
-    
+
     if (answerIndex === question.correctAnswer) {
+
       setScore(score + question.points);
+
       setCorrectAnswers(prev => prev + 1);
+
+    } else {
+
+      setWrongQuestions(prev => [
+        ...prev,
+        {
+          questionId: question.id,
+          question: question.question,
+          category: question.category,
+
+          selectedAnswer: question.answers[answerIndex],
+
+          correctAnswer:
+            question.answers[question.correctAnswer]
+        }
+      ]);
     }
   };
 
@@ -86,34 +106,37 @@ export default function Quiz() {
     setSelectedAnswer(null);
     setShowFeedback(false);
     setQuizComplete(false);
+    setWrongQuestions([]);
   };
   const saveResult = async () => {
-  try {
-    const user = auth.currentUser;
+    try {
+      const user = auth.currentUser;
 
-    if (!user) return;
+      if (!user) return;
 
-    await addDoc(collection(db, "resultados"), {
-      uid: user.uid,
-      nome:user.displayName || "Usuário sem nome",
-      email: user.email,
-      tema: selectedTheme,
-      pontuacao: score,
-      acertos: correctAnswers,
-      totalQuestoes: currentQuestions.length,
+      await addDoc(collection(db, "resultados"), {
+        uid: user.uid,
+        nome: user.displayName,
+        email: user.email,
+        tema: selectedTheme,
+        pontuacao: score,
+        acertos: correctAnswers,
+        erros: wrongQuestions.length,
+        totalQuestoes: currentQuestions.length,
+        perguntasErradas: wrongQuestions,
+        criadoEm: serverTimestamp()
+      });
 
-      criadoEm: serverTimestamp()
-    });
+      console.log("Resultado salvo!");
+    } catch (error) {
+      console.error("Erro ao salvar:", error);
+    }
+    if (!user) {
+      toast.error("Você precisa estar logado");
+      return;
+    }
+  };
 
-    console.log("Resultado salvo!");
-  } catch (error) {
-    console.error("Erro ao salvar:", error);
-  }
-if (!user) {
-  toast.error("Você precisa estar logado");
-  return;
-}
-};
 
   // Tela de Seleção de Tema
   if (!selectedTheme) {
@@ -146,7 +169,7 @@ if (!user) {
               <p>
                 Escolha a sua área de especialização e teste seus conhecimentos com perguntas direcionadas.
               </p>
-              
+
               <div className="pt-4">
                 <h3 className="text-xl font-bold text-white mb-6">Áreas de Especialização:</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -198,7 +221,7 @@ if (!user) {
             {getThemeIcon(selectedTheme, "w-5 h-5")}
             <span>{selectedTheme}</span>
           </div>
-          <button 
+          <button
             onClick={handleRestart}
             className="text-slate-300 hover:text-white underline text-sm"
           >
@@ -207,7 +230,7 @@ if (!user) {
         </div>
 
         <QuizHeader score={score} />
-        
+
         <ProgressBar current={currentQuestion} total={currentQuestions.length} />
 
         <QuestionCard
