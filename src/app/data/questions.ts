@@ -41,7 +41,76 @@ export const questionsByTheme: Record<string, Question[]> = {
       correctAnswer: 0,
       explanation: "A Primeira Lei de Kepler estabelece que todos os planetas se movem em órbitas elípticas, com o Sol ocupando um dos focos da elipse.",
       points: 15
-    }
+    }, {
+      id: 15,
+      category: "Mecânica Celeste",
+      question: "Por que o planeta Terra não sai vagando pelo espaço?",
+      answers: [
+        "Porque a força da gravidade entre o Sol e a Terra age como força centrípeta causando o movimento orbital.",
+        "Porque a força da gravidade entre os outros planetas e a Terra faz com que o planeta esteja constantemente com sua posição sendo reajustada.",
+        "Pois todos os astros se movimentam na mesma direção e sentido, portanto eles ficarão sempre juntos.",
+        "Porque não existe atrito suficiente no espaço para alterar suatrajetória."
+      ],
+      correctAnswer: 0,
+      explanation: "A gravidade exercida pelo Sol fornece a força centrípeta necessária para manter a Terra em órbita.",
+      points: 15
+    },
+    {
+      id: 17,
+      category: "Mecânica Celeste",
+      question: "O que é a unidade astronômica e qual o seu valor?",
+      answers: [
+        "É a distância média entre a Terra e a Lua, vale aproximadamente 50 milhões de quilômetros.",
+        "É a distância média entre o Sol e a Terra, vale aproximadamente 50 milhões de quilômetros.",
+        "É a distância média entre o Sol e a Terra, vale aproximadamente 150 milhões de quilômetros.",
+        "É a distância média entre Marte e o Sol, vale aproximadamente 150 milhões de quilômetros."
+      ],
+      correctAnswer: 2,
+      explanation: "Uma Unidade Astronômica (UA) corresponde à distância média entre a Terra e o Sol, cerca de 150 milhões de quilômetros.",
+      points: 15
+    }, {
+      id: 18,
+      category: "Mecânica Celeste",
+      question: "Qual o período de translação de Marte, em anos, sabendo que o raio da órbita é de 1,524 UA? (Use T²/R³ = 1)",
+      answers: [
+        "Aproximadamente 1,88 mil anos.",
+        "Aproximadamente 1,88 anos.",
+        "Aproximadamente 18,8 anos.",
+        "Aproximadamente 0,88 anos."
+      ],
+      correctAnswer: 1,
+      explanation: "T² = R³ = (1,524)³ ≈ 3,54. Logo T ≈ √3,54 ≈ 1,88 anos.",
+      points: 25
+    },
+    {
+      id: 22,
+      category: "Mecânica Celeste",
+      question: "O que diz a Lei da Gravitação Universal?",
+      answers: [
+        "Um corpo em repouso tende a permanecer em repouso, e um corpo em movimento tende a permanecer em movimento.",
+        "Dois corpos atraem-se com força proporcional às suas massas e inversamente proporcional ao quadrado da distância que separa seus centros.",
+        "Dois corpos atraem-se com força inversamente proporcional às suas massas e proporcional ao quadrado da distância que separa seus centros.",
+        "A força gravitacional depende apenas da massa do maior corpo."
+      ],
+      correctAnswer: 1,
+      explanation: "A Lei da Gravitação Universal de Newton estabelece que a força gravitacional é proporcional ao produto das massas e inversamente proporcional ao quadrado da distância.",
+      points: 15
+    },
+    {
+      id: 23,
+      category: "Mecânica Celeste",
+      question: "O que diz a Primeira Lei das Órbitas?",
+      answers: [
+        "Planetas desenvolvem órbitas circulares com o Sol ocupando o centro.",
+        "Planetas desenvolvem órbitas elípticas com o Sol ocupando o centro.",
+        "Planetas desenvolvem órbitas elípticas com o Sol ocupando um dos focos.",
+        "Planetas desenvolvem órbitas parabólicas com o Sol ocupando o vértice."
+      ],
+      correctAnswer: 2,
+      explanation: "A Primeira Lei de Kepler afirma que os planetas descrevem órbitas elípticas com o Sol em um dos focos.",
+      points: 15
+    },
+
   ],
   "Programação": [
     {
@@ -119,6 +188,20 @@ export const questionsByTheme: Record<string, Question[]> = {
       correctAnswer: 1,
       explanation: "O resistor é um componente eletrônico que se opõe à passagem da corrente elétrica, limitando seu fluxo no circuito.",
       points: 10
+    },
+    {
+      id: 24,
+      category: "Eletrônica",
+      question: "O que é um giroscópio?",
+      answers: [
+        "É um sensor que mede velocidades angulares em um ou mais eixos do veículo.",
+        "É um sensor que mede a aceleração própria do veículo.",
+        "É um sensor que mede temperatura do veículo.",
+        "É um sensor utilizado para medir pressão atmosférica."
+      ],
+      correctAnswer: 0,
+      explanation: "O giroscópio mede velocidade angular em um ou mais eixos, permitindo determinar mudanças de orientação do veículo.",
+      points: 15
     }
   ],
   "Desenho Técnico": [

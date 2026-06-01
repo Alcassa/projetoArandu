@@ -18,10 +18,10 @@ import { auth } from "../data/firebaseConfig";
 
 export default function Login() {
   const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-
   const [registerName, setRegisterName] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");

@@ -161,11 +161,12 @@ export default function RestaUm() {
 
     } else {
 
-      await saveResult("gameover");
+      await saveResult("victory");
 
       setGameState("victory");
     }
   };
+  
   const saveResult = async (result: "victory" | "gameover") => {
     try {
       const user = auth.currentUser;
@@ -179,6 +180,7 @@ export default function RestaUm() {
 
         acertos: correctAnswers,
         erros: wrongAnswers,
+        resultado: result,
         perguntasErradas: wrongQuestions,
 
         totalQuestoes: questions.length,

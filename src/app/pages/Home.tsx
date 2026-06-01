@@ -28,7 +28,7 @@ export default function Home() {
       {/* Hero */}
       <div className="max-w-6xl mx-auto px-4 py-20">
         <div className="text-center mb-16">
-          <div className="absolute top-0 right-0 hidden sm:block">
+          <div className="absolute top-0 right-0">
             {isLogged ? (
               <div className="flex items-center gap-3">
                 <span className="text-white font-medium">
