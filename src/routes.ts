@@ -3,6 +3,7 @@ import Home from "./app/pages/Home";
 import Quiz from "./app/pages/Quiz";
 import RestaUm from "./app/pages/RestaUm";
 import Login from "./app/pages/login";
+import Assessment from "./app/pages/Assessment";
 
 export const router = createHashRouter([
   {
@@ -24,5 +25,9 @@ export const router = createHashRouter([
   {
     path: "/login",
     Component: Login,
+  },
+  {
+    path: "/assessment",
+    Component: Assessment,
   }
 ]);
