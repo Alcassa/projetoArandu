@@ -17,7 +17,7 @@ export function QuestionCard({
   return (
     <div className="bg-slate-800/80 rounded-xl p-8 border border-slate-700">
       <div className="inline-block px-3 py-1 bg-purple-600 text-white rounded-full text-sm mb-4">
-        {question.category}
+        {`Pontos: ${question.points}`}
       </div>
 
       <h2 className="text-2xl font-bold text-white mb-6">{question.question}</h2>

@@ -174,7 +174,6 @@ export default function RestaUm() {
       if (!user) return;
 
       await addDoc(collection(db, "resultados-resta-um"), {
-        uid: user.uid,
         nome: user.displayName,
         email: user.email,
 

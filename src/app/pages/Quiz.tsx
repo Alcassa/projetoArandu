@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Rocket, Trophy, Orbit, Code, Zap, PencilRuler } from "lucide-react";
+import { Rocket, Trophy, Orbit, Code, Zap, Plane } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle } from "../components/ui/Card.tsx";
 import { Button } from "../components/ui/button.tsx";
 import { FeedbackSection } from "../components/layout/FeedbackSection.tsx";
@@ -13,13 +13,14 @@ import { QuestionCard } from "../components/layout/QuestionCard.tsx";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../data/firebaseConfig.ts";
 import { toast } from "sonner";
+import { Footer } from "../components/layout/Footer.tsx";
 
 const getThemeIcon = (theme: QuizTheme, className: string = "w-8 h-8") => {
   switch (theme) {
-    case "Mecânica Celeste": return <Orbit className={className} />;
+    case "Mecânica / astronáutica": return <Orbit className={className} />;
     case "Programação": return <Code className={className} />;
     case "Eletrônica": return <Zap className={className} />;
-    case "Desenho Técnico": return <PencilRuler className={className} />;
+    case "Introdução a astronáutica 2": return <Plane className={className} />;
   }
 };
 
@@ -77,7 +78,6 @@ export default function Quiz() {
         {
           questionId: question.id,
           question: question.question,
-          category: question.category,
 
           selectedAnswer: question.answers[answerIndex],
 
@@ -115,15 +115,15 @@ export default function Quiz() {
       if (!user) return;
 
       await addDoc(collection(db, "resultados"), {
-        uid: user.uid,
         nome: user.displayName,
         email: user.email,
         tema: selectedTheme,
+
         pontuacao: score,
         acertos: correctAnswers,
         erros: wrongQuestions.length,
         totalQuestoes: currentQuestions.length,
-        perguntasErradas: wrongQuestions,
+        RespostasErradas: wrongQuestions,
         criadoEm: serverTimestamp()
       });
 
@@ -239,6 +239,7 @@ export default function Quiz() {
           showFeedback={showFeedback}
           onAnswerClick={handleAnswerClick}
         />
+        
 
         {showFeedback && (
           <>
@@ -260,6 +261,7 @@ export default function Quiz() {
             </button>
           </>
         )}
+        <Footer/>
       </div>
     </div>
   );

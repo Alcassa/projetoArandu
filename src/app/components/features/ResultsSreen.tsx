@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { Trophy } from "lucide-react";
 import { LevelBadge } from "./LevelBadge.tsx";
+import { Footer } from "../layout/Footer.tsx";
 
 interface ResultsScreenProps {
   score: number;
@@ -61,6 +62,7 @@ export function ResultsScreen({ score, totalPoints, level, onRestart }: ResultsS
             ✨ Excelente trabalho! Você dominou os conceitos da missão Cansat!
           </p>
         )}
+        <Footer/>
       </div>
     </div>
   );

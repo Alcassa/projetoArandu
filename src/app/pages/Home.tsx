@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Rocket, BookOpen} from "lucide-react";
+import { Rocket, BookOpen } from "lucide-react";
 import { About } from "../components/layout/About.tsx";
 import { MissionOverview } from "../components/layout/MissionOverview.tsx";
 import { Footer } from "../components/layout/Footer.tsx";
@@ -89,7 +89,7 @@ export default function Home() {
               Resta Um
               <BookOpen className="w-5 h-5" />
             </button>
-            
+
           </div>
         </div>
 
@@ -105,13 +105,13 @@ export default function Home() {
           <p className="text-xl text-blue-100 mb-8">
             Teste seus conhecimentos e avance através dos níveis da missão Cansat
           </p>
-          <Link
-            to="/quiz"
+          <button
+            onClick={() => handleProtectedNavigation("/quiz")}
             className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 hover:bg-gray-100 rounded-full text-lg font-semibold transition-colors"
           >
-            Iniciar Quiz
+            Quiz
             <Rocket className="w-5 h-5" />
-          </Link>
+          </button>
         </div>
       </div>
 

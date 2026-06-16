@@ -1,6 +1,5 @@
 export interface Question {
   id: number;
-  category: string;
   question: string;
   answers: string[];
   correctAnswer: number;
@@ -9,10 +8,9 @@ export interface Question {
 }
 
 export const questionsByTheme: Record<string, Question[]> = {
-  "Mecânica Celeste": [
+  "Mecânica / astronáutica": [
     {
       id: 1,
-      category: "Mecânica Celeste",
       question: "Qual é a principal força responsável por manter os satélites em órbita ao redor da Terra?",
       answers: ["Força magnética", "Força gravitacional", "Força centrífuga", "Força de atrito"],
       correctAnswer: 1,
@@ -21,16 +19,14 @@ export const questionsByTheme: Record<string, Question[]> = {
     },
     {
       id: 2,
-      category: "Mecânica Celeste",
-      question: "Qual é a velocidade orbital aproximada necessária para um satélite permanecer em órbita baixa da Terra (LEO)?",
-      answers: ["3 km/s", "5 km/s", "8 km/s", "11 km/s"],
-      correctAnswer: 2,
-      explanation: "Para permanecer em órbita baixa da Terra, um satélite precisa manter uma velocidade orbital de aproximadamente 7,8 km/s (cerca de 28.000 km/h).",
+      question: "Um satélite está orbitando a Terra a 400 km de altitude. Em qual categoria de órbita ele se encontra?",
+      answers: ["HEO (High Earth Orbit)", "GEO (Geoestacionária)", "MEO (Medium Earth Orbit)", "LEO (Low Earth Orbit)"],
+      correctAnswer: 3,
+      explanation: "As órbitas LEO ficam aproximadamente entre 180 km e 2.000 km de altitude.",
       points: 15
     },
     {
       id: 3,
-      category: "Mecânica Celeste",
       question: "Qual lei de Kepler descreve que os planetas se movem em órbitas elípticas com o Sol em um dos focos?",
       answers: [
         "Primeira Lei (Lei das Órbitas)",
@@ -43,7 +39,6 @@ export const questionsByTheme: Record<string, Question[]> = {
       points: 15
     }, {
       id: 15,
-      category: "Mecânica Celeste",
       question: "Por que o planeta Terra não sai vagando pelo espaço?",
       answers: [
         "Porque a força da gravidade entre o Sol e a Terra age como força centrípeta causando o movimento orbital.",
@@ -57,7 +52,6 @@ export const questionsByTheme: Record<string, Question[]> = {
     },
     {
       id: 17,
-      category: "Mecânica Celeste",
       question: "O que é a unidade astronômica e qual o seu valor?",
       answers: [
         "É a distância média entre a Terra e a Lua, vale aproximadamente 50 milhões de quilômetros.",
@@ -70,7 +64,6 @@ export const questionsByTheme: Record<string, Question[]> = {
       points: 15
     }, {
       id: 18,
-      category: "Mecânica Celeste",
       question: "Qual o período de translação de Marte, em anos, sabendo que o raio da órbita é de 1,524 UA? (Use T²/R³ = 1)",
       answers: [
         "Aproximadamente 1,88 mil anos.",
@@ -84,7 +77,6 @@ export const questionsByTheme: Record<string, Question[]> = {
     },
     {
       id: 22,
-      category: "Mecânica Celeste",
       question: "O que diz a Lei da Gravitação Universal?",
       answers: [
         "Um corpo em repouso tende a permanecer em repouso, e um corpo em movimento tende a permanecer em movimento.",
@@ -98,144 +90,153 @@ export const questionsByTheme: Record<string, Question[]> = {
     },
     {
       id: 23,
-      category: "Mecânica Celeste",
-      question: "O que diz a Primeira Lei das Órbitas?",
+      question: "Qual sistema atua nos motores ou rodas de reação para corrigir a orientação do satélite?",
       answers: [
-        "Planetas desenvolvem órbitas circulares com o Sol ocupando o centro.",
-        "Planetas desenvolvem órbitas elípticas com o Sol ocupando o centro.",
-        "Planetas desenvolvem órbitas elípticas com o Sol ocupando um dos focos.",
-        "Planetas desenvolvem órbitas parabólicas com o Sol ocupando o vértice."
+        "Navegação",
+        "Guiagem",
+        "Controle",
+        "Energia"
       ],
       correctAnswer: 2,
-      explanation: "A Primeira Lei de Kepler afirma que os planetas descrevem órbitas elípticas com o Sol em um dos focos.",
+      explanation: "O sistema de controle atua nos atuadores (motores, rodas de reação) para corrigir a orientação e manter o satélite na atitude desejada.",
       points: 15
     },
-
+    {
+      id: 25,
+      question: "Qual é a faixa de massa típica de um picossatélite?",
+      answers: ["0,1 kg a 1 kg", "Entre 1 kg e 10 kg", "Entre 10 kg e 100 kg", "Mais de 100 kg"],
+      correctAnswer: 0,
+      explanation: "Picossatélites são satélites extremamente pequenos, com massa entre 0,1 kg e 1 kg, utilizados principalmente para experimentos de baixo custo e demonstração tecnológica.",
+      points: 15
+    },
+    {
+      id: 26,
+      question: "Qual é a diferença entre sensores inerciais e sensores de referência em um satélite?",
+      answers: [
+        "Sensores inerciais medem forças que atuam sobre o VE e que alteram seu movimento; sensores de referência observam objetos externos (Sol, estrelas, Terra) ao VE.",
+        "Sensores inerciais geram energia; sensores de referência armazenam dados.",
+        "Sensores inerciais servem apenas para comunicação.",
+        "Não há diferença entre eles."
+      ],
+      correctAnswer: 0,
+      explanation: "Sensores inerciais (acelerômetros e giroscópios) medem forças e rotações que atuam sobre o veículo, enquanto sensores de referência (sensores solares, estrelares, GPS) observam objetos externos para determinar posição e orientação.",
+      points: 15
+    },
   ],
-  "Programação": [
+
+  "Introdução a astronáutica 2": [
+    {
+      id: 1,
+      question: "Dois corpos de massas 10 kg e 20 kg estão separados por 2 m. Considerando G = 6,67 × 10⁻¹¹ N·m²/kg², qual é a força gravitacional entre eles?",
+      answers: ["3,34 × 10⁻¹⁰ N", "6,67 × 10⁻¹⁰ N", "1,67 × 10⁻¹⁰ N", "2,00 × 10⁻¹⁰ N"],
+      correctAnswer: 0,
+      explanation: "Aplicando F = G(m₁m₂)/r²: F = (6,67 × 10⁻¹¹ × 10 × 20)/(2²) = 3,34 × 10⁻¹⁰ N.",
+      points: 20
+    },
+    {
+      id: 2,
+      question: "Segundo a Primeira Lei de Kepler, as órbitas dos planetas ao redor do Sol possuem qual formato?",
+      answers: ["Circular", "Parabólico", "Elíptico", "Hiperbólico"],
+      correctAnswer: 2,
+      explanation: "A Primeira Lei de Kepler afirma que os planetas descrevem órbitas elípticas, com o Sol ocupando um dos focos da elipse.",
+      points: 10
+    },
+    {
+      id: 3,
+      question: "Qual físico formulou a Lei da Gravitação Universal, explicando a atração entre corpos com massa?",
+      answers: ["Galileu Galilei", "Johannes Kepler", "Isaac Newton", "Albert Einstein"],
+      correctAnswer: 2,
+      explanation: "Isaac Newton formulou a Lei da Gravitação Universal, estabelecendo que todos os corpos com massa se atraem mutuamente.",
+      points: 10
+    },
     {
       id: 4,
-      category: "Programação",
-      question: "Qual linguagem de programação é mais comumente usada para programar microcontroladores em projetos Cansat?",
-      answers: ["Python", "Java", "C/C++", "JavaScript"],
+      question: "Um objeto realiza Movimento Circular Uniforme em uma trajetória de raio 50 m com velocidade de 20 m/s. Qual é sua aceleração centrípeta?",
+      answers: ["4 m/s²", "6 m/s²", "8 m/s²", "10 m/s²"],
       correctAnswer: 2,
-      explanation: "C e C++ são as linguagens mais utilizadas para programar microcontroladores em projetos Cansat, oferecendo controle direto do hardware e eficiência.",
+      explanation: "Utilizando a expressão acp = v²/r, temos: acp = 20²/50 = 400/50 = 8 m/s².",
       points: 15
     },
     {
       id: 5,
-      category: "Programação",
-      question: "O que é um array em programação?",
+      question: "De acordo com a Segunda Lei de Kepler, o que acontece com a velocidade de um planeta quando ele está mais próximo do Sol?",
       answers: [
-        "Uma função matemática",
-        "Uma estrutura de dados que armazena múltiplos valores do mesmo tipo",
-        "Um tipo de loop",
-        "Um operador lógico"
+        "Diminui",
+        "Permanece constante",
+        "Aumenta",
+        "Torna-se nula"
       ],
-      correctAnswer: 1,
-      explanation: "Um array é uma estrutura de dados que permite armazenar múltiplos valores do mesmo tipo. Em projetos Cansat, arrays são usados para armazenar leituras de sensores.",
+      correctAnswer: 2,
+      explanation: "A Segunda Lei de Kepler mostra que os planetas varrem áreas iguais em tempos iguais. Portanto, eles se movem mais rapidamente quando estão mais próximos do Sol.",
       points: 10
     },
     {
       id: 6,
-      category: "Programação",
-      question: "Em um programa para Cansat, para que serve a função 'delay()' ou 'sleep()'?",
+      question: "Qual é a principal função de um veículo lançador?",
       answers: [
-        "Para deletar dados da memória",
-        "Para pausar a execução do programa por um período de tempo",
-        "Para acelerar o processamento",
-        "Para enviar dados por telemetria"
+        "Produzir energia para os satélites",
+        "Transportar cargas úteis da Terra até o espaço",
+        "Monitorar o clima terrestre",
+        "Controlar a orientação dos satélites"
       ],
       correctAnswer: 1,
-      explanation: "A função delay() pausa a execução do programa. Em Cansats, isso controla a frequência de leitura dos sensores e economiza bateria.",
-      points: 10
-    }
-  ],
-  "Eletrônica": [
-    {
-      id: 7,
-      category: "Eletrônica",
-      question: "Qual dos seguintes sensores NÃO é tipicamente encontrado em um Cansat básico?",
-      answers: ["Sensor de temperatura", "Sensor de pressão atmosférica", "Sensor de radiação nuclear", "Acelerômetro"],
-      correctAnswer: 2,
-      explanation: "Sensores de radiação nuclear não são comumente incluídos em Cansats básicos. Os sensores típicos incluem temperatura, pressão, umidade e GPS.",
+      explanation: "Os lançadores são responsáveis por levar satélites e outras cargas úteis ao espaço, fornecendo a velocidade necessária para atingir a órbita desejada.",
       points: 10
     },
     {
+      id: 7,
+      question: "Um satélite de massa 500 kg apresenta aceleração centrípeta de 8 m/s². Qual é a força centrípeta resultante sobre ele?",
+      answers: ["500 N", "1.000 N", "2.000 N", "4.000 N"],
+      correctAnswer: 3,
+      explanation: "Aplicando a Segunda Lei de Newton: F = m·a = 500 × 8 = 4.000 N.",
+      points: 15
+    },
+    {
       id: 8,
-      category: "Eletrônica",
-      question: "O que significa a sigla 'GPS' usada em sistemas de navegação de Cansats?",
+      question: "Qual das alternativas apresenta corretamente a ordem histórica dos modelos astronômicos?",
       answers: [
-        "General Position System",
-        "Global Positioning System",
-        "Gravitational Pressure Sensor",
-        "Guided Propulsion System"
+        "Ptolomeu → Copérnico → Kepler → Newton",
+        "Copérnico → Ptolomeu → Newton → Galileu",
+        "Newton → Kepler → Copérnico → Einstein",
+        "Galileu → Einstein → Ptolomeu → Newton"
       ],
-      correctAnswer: 1,
-      explanation: "GPS significa Global Positioning System. É usado em Cansats para rastrear posição, altitude e velocidade durante o voo.",
+      correctAnswer: 0,
+      explanation: "O modelo geocêntrico de Ptolomeu foi sucedido pelo heliocentrismo de Copérnico, posteriormente refinado pelas leis de Kepler e explicado pela gravitação de Newton.",
       points: 10
     },
     {
       id: 9,
-      category: "Eletrônica",
-      question: "Em um circuito, o que faz um resistor?",
+      question: "Se a distância entre dois corpos dobrar, o que acontece com a força gravitacional entre eles?",
       answers: [
-        "Armazena energia elétrica",
-        "Limita o fluxo de corrente elétrica",
-        "Gera energia elétrica",
-        "Aumenta a voltagem"
+        "Dobra de intensidade",
+        "Fica quatro vezes maior",
+        "Reduz à metade",
+        "Torna-se quatro vezes menor"
       ],
-      correctAnswer: 1,
-      explanation: "O resistor é um componente eletrônico que se opõe à passagem da corrente elétrica, limitando seu fluxo no circuito.",
+      correctAnswer: 3,
+      explanation: "Segundo a Lei da Gravitação Universal, a força gravitacional é inversamente proporcional ao quadrado da distância entre os corpos.",
       points: 10
     },
     {
-      id: 24,
-      category: "Eletrônica",
-      question: "O que é um giroscópio?",
-      answers: [
-        "É um sensor que mede velocidades angulares em um ou mais eixos do veículo.",
-        "É um sensor que mede a aceleração própria do veículo.",
-        "É um sensor que mede temperatura do veículo.",
-        "É um sensor utilizado para medir pressão atmosférica."
-      ],
-      correctAnswer: 0,
-      explanation: "O giroscópio mede velocidade angular em um ou mais eixos, permitindo determinar mudanças de orientação do veículo.",
-      points: 15
-    }
-  ],
-  "Desenho Técnico": [
-    {
       id: 10,
-      category: "Desenho Técnico",
-      question: "Qual instrumento é tradicionalmente usado em desenho técnico para traçar linhas paralelas e medir ângulos juntamente com uma régua T?",
-      answers: ["Compasso", "Esquadro", "Transferidor", "Escalímetro"],
-      correctAnswer: 1,
-      explanation: "Os esquadros (de 45° e 60°) são frequentemente utilizados apoiados na régua T ou régua paralela para traçar linhas verticais e inclinadas.",
-      points: 10
+      question: "Sabendo que, para os planetas do Sistema Solar, T² = R³, qual será o período orbital de um planeta localizado a 4 UA do Sol?",
+      answers: ["4 anos", "6 anos", "8 anos", "16 anos"],
+      correctAnswer: 2,
+      explanation: "Aplicando a Terceira Lei de Kepler: T² = 4³ = 64. Portanto, T = √64 = 8 anos.",
+      points: 15
     },
     {
       id: 11,
-      category: "Desenho Técnico",
-      question: "O que indica a hachura em um desenho técnico de peça mecânica?",
+      question: "O que é uma órbita cemitério?",
       answers: [
-        "A superfície externa da peça",
-        "O tipo de acabamento superficial",
-        "As partes maciças que foram cortadas imaginaramente",
-        "Apenas decoração do desenho"
+        "Uma órbita usada para lançar satélites.",
+        "Uma órbita onde satélites ativos realizam observações da Terra.",
+        "Uma órbita para onde satélites são movidos ao final de sua vida útil, reduzindo o risco de colisões.",
+        "Uma órbita usada apenas por estações espaciais."
       ],
       correctAnswer: 2,
-      explanation: "As hachuras são usadas para destacar e indicar as áreas onde ocorreu o 'corte' imaginário da peça, mostrando que o material é maciço ali.",
+      explanation: "A órbita cemitério é uma órbita para onde satélites são movidos ao final de sua vida útil, reduzindo o risco de colisões com outros satélites ativos.",
       points: 15
-    },
-    {
-      id: 12,
-      category: "Desenho Técnico",
-      question: "Na leitura de uma cota de diâmetro, qual símbolo é utilizado antes do valor numérico?",
-      answers: ["R", "Ø (Phi)", "Δ (Delta)", "C"],
-      correctAnswer: 1,
-      explanation: "O símbolo Ø (letra grega Phi cortada) é usado antes do número para indicar que a cota representa o diâmetro da forma circular ou cilíndrica.",
-      points: 10
     }
   ]
 };
