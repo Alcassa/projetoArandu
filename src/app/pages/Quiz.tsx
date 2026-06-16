@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Rocket, Trophy, Orbit, Code, Zap, PencilRuler } from "lucide-react";
 import { Card, CardHeader, CardContent, CardTitle } from "../components/ui/Card.tsx";
 import { Button } from "../components/ui/button.tsx";

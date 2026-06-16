@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { Send, ArrowLeft, ClipboardList } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/Card";
@@ -43,10 +43,29 @@ export default function Assessment() {
 
             const calcularMedia = (ids: string[]) =>
                 ids.reduce((acc, id) => acc + answers[id], 0) / ids.length;
+            const respostasFormatadas = Object.entries(answers).reduce(
+                (acc, [questionId, value]) => {
+                    const opcao = LIKERT_OPTIONS.find(
+                        option => option.value === value
+                    );
 
+                    acc[questionId] = {
+                        valor: value,
+                        descricao: opcao?.label || ""
+                    };
+
+                    return acc;
+                },
+                {} as Record<string, { valor: number; descricao: string }>
+            );
+            console.log("Antes do addDoc");
             await addDoc(collection(db, "avaliacoes"), {
+                uid: user.uid,
+                nome: user.displayName,
+                email: user.email,
+                
                 perguntas: QUESTIONS.map(q => q.text),
-                respostas: answers,
+                respostasFormatadas: respostasFormatadas,
                 medias: {
                     engajamento: calcularMedia(engajamento),
                     aprendizagem: calcularMedia(aprendizagem),
@@ -54,12 +73,16 @@ export default function Assessment() {
                 },
                 criadoEm: serverTimestamp()
             });
+            console.log("Depois do addDoc");
 
             toast.success(
                 "Avaliação enviada com sucesso! Obrigado pelo seu feedback."
             );
-
-            navigate("/");
+            console.log("Depois do toast");
+            setTimeout(() => {
+                console.log("Antes do navigate");
+                navigate("/");
+            }, 1500);
         } catch (error) {
             console.error(error);
 

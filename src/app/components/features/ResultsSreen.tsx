@@ -45,9 +45,9 @@ export function ResultsScreen({ score, totalPoints, level, onRestart }: ResultsS
           >
             Tentar Novamente
           </button>
-          <a href="https://github.com/poe-platform" className="text-green-300 mt-6 text-sm">
+          <Link to="/assessment" className="text-green-300 mt-6 text-sm">
             deixe um feedback para a equipe do projeto Arandu! Queremos saber como podemos melhorar a experiência e quais temas você gostaria de ver no futuro. clique aqui para enviar seu feedback
-          </a>
+          </Link>
           <Link
             to="/"
             className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors inline-block"

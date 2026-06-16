@@ -1,15 +1,25 @@
-import { Link } from "react-router";
-import { Rocket, BookOpen } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Rocket, BookOpen} from "lucide-react";
 import { About } from "../components/layout/About.tsx";
 import { MissionOverview } from "../components/layout/MissionOverview.tsx";
 import { Footer } from "../components/layout/Footer.tsx";
 import { auth } from "../data/firebaseConfig";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
-
+import { toast } from "sonner";
 export default function Home() {
   const [userName, setUserName] = useState("");
   const [isLogged, setIsLogged] = useState(false);
+  const navigate = useNavigate();
+  const handleProtectedNavigation = (path: string) => {
+    if (!isLogged) {
+      toast.error("Faça login para acessar os jogos.");
+      navigate("/login");
+      return;
+    }
+
+    navigate(path);
+  };
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -64,19 +74,22 @@ export default function Home() {
             Desvendando os mistérios da Engenharia Aeroespacial através da gamificação
           </p>
           <div className="flex justify-center gap-6">
-            <Link
-              to="/quiz"
+            <button
+              onClick={() => handleProtectedNavigation("/quiz")}
               className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-lg font-semibold transition-colors shadow-lg shadow-blue-500/50"
             >
-              Começar Missão
+              Quiz
               <Rocket className="w-5 h-5" />
-            </Link>
+            </button>
 
-            <Link to="/resta-um"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-full text-lg font-semibold transition-colors shadow-lg shadow-red-500/50">
-              resta um
+            <button
+              onClick={() => handleProtectedNavigation("/resta-um")}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-full text-lg font-semibold transition-colors shadow-lg shadow-red-500/50"
+            >
+              Resta Um
               <BookOpen className="w-5 h-5" />
-            </Link>
+            </button>
+            
           </div>
         </div>
 
