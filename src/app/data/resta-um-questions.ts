@@ -321,24 +321,6 @@ export const restaUmQuestionsByTheme: Record<string, RestaUmQuestion[]> = {
     },
 
     {
-      id: 31,
-      category: "Programação",
-
-      question: "Qual será o valor da variável x após a execução do código abaixo?\n\nint x = 5;\nx = x + 3;",
-
-      options: [
-        "3",
-        "5",
-        "8",
-        "15"
-      ],
-
-      correct: 2,
-
-      hint: "A variável x começa com o valor 5. Na segunda linha, 3 é somado ao valor atual, resultando em x = 8."
-    },
-
-    {
       id: 32,
       category: "Programação",
 
@@ -354,42 +336,6 @@ export const restaUmQuestionsByTheme: Record<string, RestaUmQuestion[]> = {
       correct: 2,
 
       hint: "O tipo float é utilizado para armazenar números de ponto flutuante, como 3.14 ou 25.5."
-    },
-
-    {
-      id: 33,
-      category: "Programação",
-
-      question: "Qual operador lógico representa a condição 'E' em C?",
-
-      options: [
-        "||",
-        "&&",
-        "!",
-        "=="
-      ],
-
-      correct: 1,
-
-      hint: "O operador && representa o operador lógico E. A expressão será verdadeira somente quando as duas condições forem verdadeiras."
-    },
-
-    {
-      id: 34,
-      category: "Programação",
-
-      question: "Qual operador lógico representa a condição 'OU' em C?",
-
-      options: [
-        "&&",
-        "!",
-        "||",
-        "=="
-      ],
-
-      correct: 2,
-
-      hint: "O operador || representa o operador lógico OU. A expressão será verdadeira quando pelo menos uma das condições for verdadeira."
     },
 
     {
