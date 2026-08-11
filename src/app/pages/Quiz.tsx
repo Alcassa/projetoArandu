@@ -6,7 +6,8 @@ import { Button } from "../components/ui/button.tsx";
 import { FeedbackSection } from "../components/layout/FeedbackSection.tsx";
 import { QuizHeader } from "../components/layout/QuizHeadear.tsx";
 import { questionsByTheme } from "../data/questions.ts";
-import type { QuizTheme } from "../data/questions.ts";
+import type { Question, QuizTheme } from "../data/questions.ts";
+import { shuffleArray } from "../data/shuffle.ts";
 import { ResultsScreen } from "../components/features/ResultsSreen.tsx";
 import { ProgressBar } from "../components/layout/ProgressBar.tsx";
 import { QuestionCard } from "../components/layout/QuestionCard.tsx";
@@ -33,9 +34,9 @@ export default function Quiz() {
   const [quizComplete, setQuizComplete] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [wrongQuestions, setWrongQuestions] = useState<any[]>([]);
+  const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const user = auth.currentUser;
 
-  const currentQuestions = selectedTheme ? questionsByTheme[selectedTheme] : [];
   const question = currentQuestions[currentQuestion];
 
   const getLevel = (finalScore: number) => {
@@ -50,6 +51,7 @@ export default function Quiz() {
 
   const handleStart = (theme: QuizTheme) => {
     setSelectedTheme(theme);
+    setCurrentQuestions(shuffleArray(questionsByTheme[theme]));
     setCurrentQuestion(0);
     setScore(0);
     setSelectedAnswer(null);
@@ -101,6 +103,7 @@ export default function Quiz() {
 
   const handleRestart = () => {
     setSelectedTheme(null);
+    setCurrentQuestions([]);
     setCurrentQuestion(0);
     setScore(0);
     setSelectedAnswer(null);

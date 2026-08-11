@@ -123,7 +123,6 @@ export const questionsByTheme: Record<string, Question[]> = {
       points: 15
     },
   ],
-
   "Introdução a astronáutica 2": [
     {
       id: 1,
@@ -237,6 +236,72 @@ export const questionsByTheme: Record<string, Question[]> = {
       correctAnswer: 2,
       explanation: "A órbita cemitério é uma órbita para onde satélites são movidos ao final de sua vida útil, reduzindo o risco de colisões com outros satélites ativos.",
       points: 15
+    }
+  ],
+  "Programação": [
+    {
+      id: 1,
+      question: "Qual é o tipo de variável mais adequado para armazenar a idade de uma pessoa em um programa C?",
+      answers: ["int", "double", "char", "float"],
+      correctAnswer: 0,
+      explanation: "O tipo int é o mais adequado, pois a idade é um número inteiro e o int armazena inteiros.",
+      points: 10
+    },
+    {
+      id: 2,
+      question: "Se declararmos int x=10%3;, qual será o valor armazenado na variável x?",
+      answers: ["3.33", "1", "3", "0"],
+      correctAnswer: 1,
+      explanation: "O operador % (módulo) retorna o resto da divisão. Como 10 dividido por 3 tem resto 1, x será igual a 1.",
+      points: 10
+    },
+    {
+      id: 3,
+      question: "Qual dos seguintes operadores é utilizado para verificar se dois valores são exatamente iguais em uma condição if?",
+      answers: ["==", "!=", "<=", "="],
+      correctAnswer: 0,
+      explanation: "O operador de comparação de igualdade em C é o ==. O operador = é apenas de atribuição.",
+      points: 10
+    },
+    {
+      id: 4,
+      question: "Analise o código: int a=5; int b=10; if(a>0 && b<5). A condição do if será verdadeira ou falsa?",
+      answers: ["Falsa", "Erro de sintaxe", "Verdadeira", "Indeterminada"],
+      correctAnswer: 0,
+      explanation: "a>0 é verdadeiro, mas b<5 é falso. Como o operador && exige que ambas sejam verdadeiras, a condição inteira é falsa.",
+      points: 10
+    },
+    {
+      id: 5,
+      question: "Qual será o valor da variável resultado após a execução de: int resultado=7/2;",
+      answers: ["4", "3", "1", "3.5"],
+      correctAnswer: 1,
+      explanation: "Como resultado é do tipo int, a divisão de inteiros 7/2 retorna 3 (a parte decimal é descartada).",
+      points: 10
+    },
+    {
+      id: 6,
+      question: "Como se escreve corretamente a estrutura para executar um código caso a condição do if não seja atendida?",
+      answers: ["else { ... }", "else (condição) { ... }", "if false { ... }", "otherwise { ... }"],
+      correctAnswer: 0,
+      explanation: "A estrutura correta em C é o else { ... }, que executa o bloco quando a condição do if é falsa, sem repetir a condição.",
+      points: 10
+    },
+    {
+      id: 7,
+      question: "Se int x=5; e executarmos x=x+3;, qual o novo valor de x?",
+      answers: ["3", "5", "8", "x3"],
+      correctAnswer: 2,
+      explanation: "O comando soma 3 ao valor atual de x. Como x valia 5, x passa a valer 8.",
+      points: 10
+    },
+    {
+      id: 8,
+      question: "Qual operador lógico deve ser usado para que um código execute se PELO MENOS UMA de duas condições for verdadeira?",
+      answers: ["!", "||", "==", "&&"],
+      correctAnswer: 1,
+      explanation: "O operador || (OU lógico) retorna verdadeiro se pelo menos uma das condições for verdadeira.",
+      points: 10
     }
   ]
 };

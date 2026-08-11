@@ -9,12 +9,16 @@ import {
   RotateCcw,
   CheckCircle2,
   XCircle,
-  BrainCircuit
+  BrainCircuit,
+  Orbit,
+  Code
 } from "lucide-react";
 import { Button } from "../components/ui/button.tsx";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card.tsx";
 import { Badge } from "../components/features/Badge.tsx";
-import { restaUmQuestions as questions } from "../data/resta-um-questions.ts";
+import { restaUmQuestionsByTheme } from "../data/resta-um-questions.ts";
+import type { RestaUmQuestion } from "../data/resta-um-questions.ts";
+import { shuffleArray } from "../data/shuffle.ts";
 import { auth, db } from "../data/firebaseConfig.ts";
 import { addDoc, collection } from "firebase/firestore";
 
@@ -22,6 +26,7 @@ type GameState = "intro" | "playing" | "gameover" | "victory";
 
 export default function RestaUm() {
   const [gameState, setGameState] = useState<GameState>("intro");
+  const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [lives, setLives] = useState(3);
   const [hintsRemaining, setHintsRemaining] = useState(3);
@@ -40,7 +45,15 @@ export default function RestaUm() {
     }[]
   >([]);
 
-  const startGame = () => {
+  const [questions, setQuestions] = useState<RestaUmQuestion[]>([]);
+
+  const startGame = (theme?: string) => {
+    const activeTheme = theme ?? selectedTheme;
+
+    if (!activeTheme) return;
+
+    setSelectedTheme(activeTheme);
+    setQuestions(shuffleArray(restaUmQuestionsByTheme[activeTheme]));
     setGameState("playing");
     setCurrentQuestionIndex(0);
     setLives(3);
@@ -128,23 +141,7 @@ export default function RestaUm() {
           selectedOption
         ]);
 
-        setLives(prev => {
-
-          const newLives = prev - 1;
-
-          if (newLives <= 0) {
-
-            setTimeout(async () => {
-
-              await saveResult("gameover");
-
-              setGameState("gameover");
-
-            }, 600);
-          }
-
-          return newLives;
-        });
+        setLives(prev => prev - 1);
 
         setShowHint(true);
       }
@@ -152,7 +149,13 @@ export default function RestaUm() {
   };
 
   const nextQuestion = async () => {
-    if (currentQuestionIndex + 1 < questions.length) {
+    if (lives <= 0) {
+
+      await saveResult("gameover");
+
+      setGameState("gameover");
+
+    } else if (currentQuestionIndex + 1 < questions.length) {
 
       setCurrentQuestionIndex(prev => prev + 1);
       setEliminatedOptions([]);
@@ -176,6 +179,7 @@ export default function RestaUm() {
       await addDoc(collection(db, "resultados-resta-um"), {
         nome: user.displayName,
         email: user.email,
+        tema: selectedTheme,
 
         acertos: correctAnswers,
         erros: wrongAnswers,
@@ -205,7 +209,11 @@ export default function RestaUm() {
             <BrainCircuit className="text-blue-400 w-8 h-8" />
             Resta Um: Sobrevivência
           </h1>
-          <p className="text-blue-200 mt-2">Dinâmica e Cinemática - Projeto Arandu</p>
+          <p className="text-blue-200 mt-2">
+            {selectedTheme
+              ? `${selectedTheme} - Projeto Arandu`
+              : "Escolha um assunto para começar - Projeto Arandu"}
+          </p>
         </div>
         <Link to="/">
           <Button variant="outline" className="text-slate-900 font-semibold border-white/20">
@@ -227,8 +235,35 @@ export default function RestaUm() {
             </CardHeader>
             <CardContent className="space-y-6 text-center text-lg text-slate-300 px-4 md:px-12 pb-12">
               <p>
-                Bem-vindo ao modo <strong>Resta Um: Sobrevivência</strong>. O objetivo é responder a uma sequência de perguntas sobre Dinâmica e Cinemática.
+                Bem-vindo ao modo <strong>Resta Um: Sobrevivência</strong>. Primeiro, escolha o assunto das perguntas e depois responda a sequência para sobreviver.
               </p>
+              <div className="space-y-4">
+                <h3 className="text-white font-bold flex items-center justify-center gap-2">
+                  <Rocket className="w-5 h-5 text-blue-400" /> Escolha o assunto:
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Object.entries(restaUmQuestionsByTheme).map(([theme, themeQuestions]) => (
+                    <button
+                      key={theme}
+                      onClick={() => startGame(theme)}
+                      className="group relative bg-slate-900/50 p-6 rounded-lg border border-slate-700 hover:border-blue-400 hover:bg-slate-900 transition-all text-left"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-lg bg-blue-600/20 border border-blue-500/30 shrink-0">
+                          {theme === "Programação"
+                            ? <Code className="w-8 h-8 text-blue-400" />
+                            : <Orbit className="w-8 h-8 text-blue-400" />}
+                        </div>
+                        <div>
+                          <h4 className="text-white font-bold text-lg">{theme}</h4>
+                          <p className="text-slate-400 text-sm">{themeQuestions.length} perguntas</p>
+                        </div>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-blue-500 absolute right-5 top-1/2 -translate-y-1/2 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div className="bg-slate-900/50 p-6 rounded-lg border border-slate-700 text-left space-y-4">
                 <h3 className="text-white font-bold flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-yellow-400" /> Como funciona:
@@ -241,9 +276,6 @@ export default function RestaUm() {
                   <li>Chegue até o final para vencer o desafio!</li>
                 </ul>
               </div>
-              <Button size="lg" onClick={startGame} className="bg-blue-600 hover:bg-blue-700 text-lg px-12 py-6 mt-8 w-full md:w-auto">
-                Iniciar Missão
-              </Button>
             </CardContent>
           </Card>
         )}
@@ -380,10 +412,10 @@ export default function RestaUm() {
             </CardHeader>
             <CardContent className="pb-12">
               <p className="text-slate-300 mb-8">
-                Não desanime! A exploração espacial é feita de tentativas e aprendizados. Revise os conceitos de Dinâmica e tente novamente.
+                Não desanime! A exploração espacial é feita de tentativas e aprendizados. Revise os conceitos do assunto e tente novamente.
               </p>
               <div className="flex justify-center gap-4">
-                <Button size="lg" onClick={startGame} className="bg-blue-600 hover:bg-blue-700">
+                <Button size="lg" onClick={() => startGame()} className="bg-blue-600 hover:bg-blue-700">
                   <RotateCcw className="w-5 h-5 mr-2" /> Tentar Novamente
                 </Button>
                 <Link to="/">
@@ -408,7 +440,7 @@ export default function RestaUm() {
                 Missão Cumprida!
               </CardTitle>
               <p className="text-xl text-green-400 font-medium">
-                Você sobreviveu ao teste de Dinâmica e Cinemática!
+                Você sobreviveu ao teste de {selectedTheme}!
               </p>
             </CardHeader>
             <CardContent className="pb-12">
@@ -416,7 +448,7 @@ export default function RestaUm() {
                 Com {lives} {lives === 1 ? 'vida restante' : 'vidas restantes'}, você provou que tem os conhecimentos necessários para a próxima etapa do Projeto Arandu.
               </p>
               <div className="flex justify-center gap-4">
-                <Button size="lg" onClick={startGame} className="bg-blue-600 hover:bg-blue-700">
+                <Button size="lg" onClick={() => startGame()} className="bg-blue-600 hover:bg-blue-700">
                   <RotateCcw className="w-5 h-5 mr-2" /> Jogar Novamente
                 </Button>
                 <Link to="/">
